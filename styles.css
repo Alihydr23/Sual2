@@ -1,0 +1,120 @@
+:root {
+  /* Color Variables */
+  --background-color-light: #ffffff;
+  --background-color-dark: #000000;
+  --text-color-light: #000000;
+  --text-color-dark: #ffffff;
+  --accent-color-light: #c5a059;
+  --accent-color-dark: #c5a059;
+
+  /* Accessibility */
+  --high-contrast-color: #ff0000;
+  --reduced-motion: 1;
+}
+
+/* Light Theme */
+body.light {
+  background-color: var(--background-color-light);
+  color: var(--text-color-light);
+}
+
+/* Dark Theme */
+body.dark {
+  background-color: var(--background-color-dark);
+  color: var(--text-color-dark);
+}
+
+/* Tap-area styles */
+tap-area {
+  display: block;
+  padding: 10px;
+  background-color: var(--accent-color-light);
+}
+
+/* Counter Styles */
+.counter {
+  font-size: 2em;
+  color: var(--text-color-dark);
+}
+
+/* Button Styles */
+button {
+  padding: 10px 15px;
+  background-color: var(--accent-color-light);
+  color: var(--text-color-light);
+  border: none;
+  cursor: pointer;
+}
+button:focus {
+  outline: 2px solid var(--accent-color-dark);
+}
+
+/* Panel Styles */
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: var(--accent-color-light);
+}
+
+/* List item Styles */
+.list-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Theme Switcher Styles */
+.theme-switch {
+  cursor: pointer;
+  padding: 10px;
+  background-color: var(--accent-color-light);
+}
+
+/* Statistics Card Styles */
+.stats-card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 20px;
+  background-color: var(--accent-color-light);
+}
+
+/* Achievement Badge Styles */
+.badge {
+  padding: 5px 10px;
+  background-color: var(--accent-color-light);
+  border-radius: 5px;
+}
+
+/* Keyboard Navigation Indicators */
+:focus {
+  outline: 2px solid var(--high-contrast-color);
+}
+
+/* Animation Effects */
+.fade {
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Safe Area Insets for Notched Devices */
+@supports (padding: env(safe-area-inset-top)) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Flexbox/Grid Layout */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Ensure WCAG 2.1 AA Compliance */
+body {
+  color: contrast(var(--text-color-light), var(--background-color-light));
+  color: contrast(var(--text-color-dark), var(--background-color-dark));
+}
