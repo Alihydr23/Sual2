@@ -3,22 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <title>Your Title Here</title>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('service-worker.js').then(function(registration) {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                }, function(err) {
-                    console.log('Service Worker registration failed:', err);
-                });
-            });
+    <meta name="description" content="Sual Şifa Application">
+    <link rel="manifest" href="/manifest.json">
+    <title>Sual Şifa</title>
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
         }
-    </script>
+        .gold {
+            color: #c5a059;
+        }
+        .theme-switcher {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+        .panel {
+            padding: 20px;
+            border: 1px solid #444;
+        }
+    </style>
+    <script src="js/security.js" defer></script>
+    <script src="js/accessibility.js" defer></script>
+    <script src="js/analytics.js" defer></script>
 </head>
 <body>
-    <h1>Hello World</h1>
+    <div class="theme-switcher" aria-label="Toggle theme" tabindex="0" role="button" onclick="toggleTheme()" onkeypress="toggleTheme()">
+        Switch Theme
+    </div>
+
+    <header>
+        <h1 class="gold">Welcome to Sual Şifa</h1>
+    </header>
+
+    <main>
+        <section id="esma-counter" class="panel" aria-label="99 Esma Counter">
+            <h2 class="gold">99 Esma Counter</h2>
+            <div id="counter">0</div>
+        </section>
+
+        <section id="daily-verse" class="panel" aria-label="Daily Verse Section">
+            <h2 class="gold">Daily Verse</h2>
+            <div id="verse">Today’s verse content will appear here.</div>
+        </section>
+
+        <section id="statistics" class="panel" aria-label="Statistics Panel">
+            <h2 class="gold">Statistics</h2>
+            <div>Performance data will be shown here.</div>
+        </section>
+
+        <section id="footer-panels" aria-label="Footer Panels">
+            <div class="panel">
+                <h2 class="gold">99 ESMA</h2>
+                <p>Details about 99 Esma...</p>
+            </div>
+            <div class="panel">
+                <h2 class="gold">ZİKİRLERİM</h2>
+                <p>Your zikirs will be listed here...</p>
+            </div>
+            <div class="panel">
+                <h2 class="gold">AYETLER</h2>
+                <p>Quran verses...</p>
+            </div>
+            <div class="panel">
+                <h2 class="gold">DEFTER</h2>
+                <p>Your notes...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Sual Şifa. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            document.body.classList.toggle('light');
+        }
+    </script>
 </body>
 </html>
