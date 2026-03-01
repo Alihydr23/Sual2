@@ -1,43 +1,229 @@
-function renderMyZikirs() {
-    const container = document.getElementById('myZikirCont');
-    let html = '';
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Sual Şifa</title>
+    <style>
+        :root { --gold: #c5a059; --bg: #000; --text: #d1c7b7; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; user-select: none; }
+        
+        body { 
+            height: 100dvh; background: var(--bg); color: var(--text); 
+            font-family: -apple-system, system-ui, sans-serif; 
+            display: flex; flex-direction: column; overflow: hidden; 
+        }
 
-    // 1. ADIM: Ekleme Butonunu Fonksiyonun Başına Alıyoruz
-    html += `
-        <button class="add-btn" onclick="showAddForm()" style="width:100%; margin-bottom:15px;">
-            <span>+</span>
-            <span>Yeni Zikir Ekle</span>
-        </button>
-    `;
+        /* AYET BÖLÜMÜ */
+        .daily-verse {
+            background: linear-gradient(135deg, #1a1200 0%, #000 100%);
+            border-bottom: 1px solid var(--gold);
+            padding: 15px; text-align: center; cursor: pointer;
+        }
+        .verse-label { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 5px; }
+        #verseText { font-size: 0.9rem; color: #fff; font-style: italic; line-height: 1.4; }
+        #verseRef { font-size: 0.75rem; color: var(--gold); margin-top: 5px; display: block; }
 
-    // 2. ADIM: 99 Esma Başlığı ve Listesi
-    html += '<div style="color:var(--gold); font-size:0.8rem; margin:10px 0; opacity:0.7;">99 ESMÂ</div>';
-    esmalar.slice(0, 10).forEach(e => {
-        html += `
-            <div class="list-item" onclick="selectZikir({n:'${e.n}', m:'${e.m}', target:99}, 'esma')">
-                <div>
-                    <b>${e.n}</b>
-                    <small>${e.m}</small>
-                </div>
+        /* HEADER & LOGO */
+        header { padding: 10px 0; text-align: center; }
+        .logo-text { color: var(--gold); font-size: 1.5rem; font-weight: bold; letter-spacing: 4px; }
+        .app-logo { 
+            display: block; margin: 10px auto; 
+            width: 120px; height: 120px; /* Logo Büyük */
+            object-fit: contain; filter: drop-shadow(0 0 10px var(--gold));
+        }
+
+        /* ANA SAYAÇ */
+        main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .counter-container {
+            position: relative; width: 200px; height: 200px;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+        }
+        .counter-container:active { transform: scale(0.95); }
+        
+        svg { position: absolute; width: 100%; height: 100%; transform: rotate(-90deg); }
+        circle { fill: none; stroke-width: 8; stroke-linecap: round; }
+        .bg-circle { stroke: #1a1a1a; }
+        .prog-circle { 
+            stroke: var(--gold); stroke-dasharray: 565; stroke-dashoffset: 565; 
+            transition: stroke-dashoffset 0.2s; filter: drop-shadow(0 0 5px var(--gold));
+        }
+
+        .counter-info { text-align: center; z-index: 10; }
+        #counter { font-size: 4rem; color: #fff; line-height: 1; }
+        #label { font-size: 1.2rem; color: var(--gold); display: block; margin-bottom: 5px; }
+        .progress-sub { font-size: 0.8rem; opacity: 0.6; }
+
+        /* BUTONLAR */
+        .target-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .target-btns button { 
+            padding: 8px 15px; background: #0f0f0f; border: 1px solid #333; 
+            color: #999; border-radius: 20px; font-size: 0.8rem;
+        }
+        .target-btns button.active { border-color: var(--gold); color: var(--gold); }
+
+        .action-btns { display: flex; gap: 25px; margin-top: 25px; }
+        .btn-small { background: none; border: 1px solid #333; color: #666; padding: 10px; border-radius: 50%; font-size: 0.6rem; width: 50px; height: 50px; }
+
+        /* FOOTER */
+        footer { 
+            padding: 15px 10px calc(15px + env(safe-area-inset-bottom));
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+            background: #050505; border-top: 1px solid #1a1a1a;
+        }
+        footer button { background: #0f0f0f; border: 1px solid #222; color: #aaa; padding: 12px 0; border-radius: 8px; font-size: 0.65rem; font-weight: bold; }
+        .gold-btn { border-color: var(--gold); color: var(--gold) !important; }
+
+        /* MODAL */
+        .modal { position: fixed; inset: 0; background: #000; z-index: 100; display: none; flex-direction: column; padding: 20px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .modal-body { overflow-y: auto; flex: 1; }
+        .list-item { background: #0f0f0f; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 3px solid var(--gold); }
+    </style>
+</head>
+<body>
+
+    <div class="daily-verse" onclick="openModal('verses')">
+        <span class="verse-label">📖 GÜNÜN AYETİ</span>
+        <div id="verseText">Yükleniyor...</div>
+        <span id="verseRef"></span>
+    </div>
+
+    <header>
+        <div class="logo-text">SUAL ŞİFA</div>
+        <img src="logo.png" class="app-logo" alt="Logo" onerror="this.style.opacity='0'">
+    </header>
+
+    <main>
+        <div class="counter-container" onclick="handleTap()">
+            <svg viewBox="0 0 200 200">
+                <circle class="bg-circle" cx="100" cy="100" r="90"></circle>
+                <circle id="progCircle" class="prog-circle" cx="100" cy="100" r="90"></circle>
+            </svg>
+            <div class="counter-info">
+                <span id="label">Allah</span>
+                <div id="counter">0</div>
+                <div class="progress-sub"><span id="cur">0</span> / <span id="tgt">33</span></div>
             </div>
-        `;
-    });
+        </div>
 
-    // 3. ADIM: Kendi Zikirlerim Başlığı ve Listesi
-    if (state.customZikirs.length > 0) {
-        html += '<div style="color:var(--gold); font-size:0.8rem; margin:15px 0 10px; opacity:0.7;">KENDİ ZİKİRLERİM</div>';
-        state.customZikirs.forEach(z => {
-            html += `
-                <div class="list-item" onclick="selectZikir({n:'${z.n}', m:'${z.m}', target:${z.target}}, 'custom')">
-                    <div>
-                        <b>${z.n}</b>
-                        <small>${z.m} • ${z.target} adet</small>
-                    </div>
-                    <button onclick="deleteZikir(${z.id}, event)" style="background:none; border:none; color:red; font-size:1.2rem;">🗑</button>
-                </div>
-            `;
-        });
-    }
+        <div class="target-btns">
+            <button onclick="setTgt(11)">11</button>
+            <button onclick="setTgt(33)" class="active" id="btn33">33</button>
+            <button onclick="setTgt(99)">99</button>
+            <button onclick="setTgt(100)">100</button>
+        </div>
 
-    container.innerHTML = html;
-}
+        <div class="action-btns">
+            <button class="btn-small" onclick="undo()">GERİ</button>
+            <button class="btn-small" onclick="reset()">SIFIRLA</button>
+        </div>
+    </main>
+
+    <footer>
+        <button onclick="openModal('esma')">99 ESMA</button>
+        <button onclick="openModal('mine')">ZİKİRLER</button>
+        <button onclick="openModal('verses')">AYETLER</button>
+        <button class="gold-btn" onclick="openModal('history')">DEFTER</button>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-header"><h2 id="modalTitle">Liste</h2><button onclick="closeModal()" style="background:none; border:none; color:#fff; font-size:1.5rem;">✕</button></div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+
+    <script>
+        const verses = [
+            {t:"Şüphesiz zorlukla beraber bir kolaylık vardır.", r:"İnşirah, 6"},
+            {t:"Allah sabredenlerle beraberdir.", r:"Bakara, 153"},
+            {t:"Kalpler ancak Allah'ı zikretmekle huzur bulur.", r:"Rad, 28"},
+            {t:"Allah bize yeter, O ne güzel vekildir.", r:"Al-i İmran, 173"},
+            {t:"O, size şah damarınızdan daha yakındır.", r:"Kaf, 16"}
+        ];
+
+        const esma = [
+            {n:"Allah", m:"Celle Celaluhu"}, {n:"Er-Rahmân", m:"Bağışlayan"}, {n:"Er-Rahîm", m:"Esirgeyen"},
+            {n:"El-Melik", m:"Mülkün Sahibi"}, {n:"El-Kuddûs", m:"Eksiksiz"}
+        ];
+
+        let state = { count: 0, target: 33, label: "Allah", history: [], undoStack: [] };
+
+        function init() {
+            const saved = localStorage.getItem('sual_v2');
+            if(saved) {
+                const p = JSON.parse(saved);
+                state.count = p.count; state.target = p.target; state.label = p.label; state.history = p.history;
+            }
+            const r = verses[Math.floor(Math.random()*verses.length)];
+            document.getElementById('verseText').innerText = r.t;
+            document.getElementById('verseRef').innerText = r.r;
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('counter').innerText = state.count;
+            document.getElementById('cur').innerText = state.count;
+            document.getElementById('tgt').innerText = state.target;
+            document.getElementById('label').innerText = state.label;
+            
+            const circle = document.getElementById('progCircle');
+            const offset = 565 - (state.count / state.target * 565);
+            circle.style.strokeDashoffset = offset;
+            
+            localStorage.setItem('sual_v2', JSON.stringify(state));
+        }
+
+        function handleTap() {
+            if(state.count < state.target) {
+                state.undoStack.push(state.count);
+                state.count++;
+                if(navigator.vibrate) navigator.vibrate(40);
+                updateUI();
+                if(state.count == state.target) {
+                    state.history.unshift({n: state.label, d: new Date().toLocaleDateString()});
+                    alert("Hedef tamamlandı!");
+                }
+            }
+        }
+
+        function setTgt(t) {
+            state.target = t; state.count = 0;
+            document.querySelectorAll('.target-btns button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            updateUI();
+        }
+
+        function reset() { if(confirm("Sıfırlansın mı?")) { state.count = 0; updateUI(); } }
+        function undo() { if(state.undoStack.length > 0) { state.count = state.undoStack.pop(); updateUI(); } }
+
+        function openModal(type) {
+            const m = document.getElementById('modal');
+            const b = document.getElementById('modalBody');
+            const t = document.getElementById('modalTitle');
+            m.style.display = 'flex'; b.innerHTML = '';
+
+            if(type === 'esma') {
+                t.innerText = "99 Esma";
+                esma.forEach(e => {
+                    b.innerHTML += `<div class="list-item" onclick="selectE('${e.n}')"><b>${e.n}</b><br><small>${e.m}</small></div>`;
+                });
+            } else if(type === 'history') {
+                t.innerText = "Defter";
+                state.history.forEach(h => {
+                    b.innerHTML += `<div class="list-item"><b>${h.n}</b> - ${h.d}</div>`;
+                });
+            } else if(type === 'verses') {
+                t.innerText = "Ayetler";
+                verses.forEach(v => {
+                    b.innerHTML += `<div class="list-item"><i>"${v.t}"</i><br><small>${v.r}</small></div>`;
+                });
+            }
+        }
+
+        function selectE(n) { state.label = n; state.count = 0; closeModal(); updateUI(); }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+        init();
+    </script>
+</body>
+</html>
