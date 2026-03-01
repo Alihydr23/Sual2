@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Sual Şifa - Hepsi Bir Arada</title>
+    <title>Sual Şifa - Profesyonel Zikirmatik</title>
     <style>
         :root { 
             --gold: #c5a059; 
@@ -20,29 +20,33 @@
             display: flex; flex-direction: column; overflow: hidden; 
         }
         
-        /* GÜNLÜK AYET BÖLÜMÜ */
+        /* AYET BÖLÜMÜ */
         .daily-verse {
             background: linear-gradient(135deg, #1a1200 0%, #0f0a00 100%);
             border-bottom: 1px solid var(--gold);
             padding: 15px 20px;
             cursor: pointer;
+            min-height: 80px;
         }
-        .verse-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .verse-label { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-        .verse-text { font-size: 0.95rem; line-height: 1.6; color: #fff; font-style: italic; text-align: center; }
-        .verse-ref { font-size: 0.75rem; color: var(--gold); text-align: right; margin-top: 5px; }
+        .verse-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .verse-label { font-size: 0.65rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
+        .verse-text { font-size: 0.9rem; line-height: 1.4; color: #fff; font-style: italic; text-align: center; }
+        .verse-ref { font-size: 0.7rem; color: var(--gold); text-align: right; margin-top: 3px; }
 
-        header { padding: 15px 0 10px; text-align: center; }
-        .logo { color: var(--gold); font-size: 1.6rem; font-weight: bold; letter-spacing: 3px; }
+        /* HEADER & LOGO */
+        header { padding: 10px 0; text-align: center; }
+        .logo-text { color: var(--gold); font-size: 1.6rem; font-weight: bold; letter-spacing: 3px; }
+        .app-logo { width: 50px; margin-top: 5px; filter: drop-shadow(0 0 5px var(--gold)); border-radius: 50%; }
 
+        /* ANA EKRAN */
         main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; }
         
         .tap-area {
-            position: relative; width: 250px; height: 250px;
+            position: relative; width: 240px; height: 240px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             cursor: pointer; border-radius: 50%;
         }
-        .tap-area:active { transform: scale(0.95); }
+        .tap-area:active { transform: scale(0.96); transition: 0.1s; }
         
         svg { position: absolute; inset: 0; transform: rotate(-90deg); width: 100%; height: 100%; }
         circle { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.3s ease; }
@@ -50,8 +54,8 @@
         .main-circle { stroke: var(--gold); filter: drop-shadow(0 0 8px var(--gold)); }
         
         .counter-wrapper { text-align: center; z-index: 5; pointer-events: none; }
-        #counter { font-size: 4.5rem; color: #fff; font-weight: 200; }
-        #label { font-size: 1.5rem; color: var(--gold); font-weight: 600; }
+        #counter { font-size: 4rem; color: #fff; font-weight: 200; }
+        #label { font-size: 1.3rem; color: var(--gold); font-weight: 600; }
         .progress-text { font-size: 0.75rem; opacity: 0.5; margin-top: 5px; }
         
         .quick-targets { display: flex; gap: 8px; margin-top: 15px; }
@@ -61,32 +65,29 @@
         }
         .quick-targets button.active { border-color: var(--gold); color: var(--gold); }
         
-        .controls { display: flex; gap: 15px; margin-top: 20px; }
+        .controls { display: flex; gap: 20px; margin-top: 20px; }
         .circle-btn { 
-            width: 55px; height: 55px; border-radius: 50%; border: 2px solid #333; 
-            background: #0f0f0f; color: var(--text); font-size: 0.65rem; 
+            width: 50px; height: 50px; border-radius: 50%; border: 1px solid #333; 
+            background: #0f0f0f; color: var(--text); font-size: 0.6rem; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         
+        /* ALT MENÜ */
         footer { 
-            padding: 15px 10px calc(15px + env(safe-area-inset-bottom)); 
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; 
+            padding: 12px 10px calc(12px + env(safe-area-inset-bottom)); 
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; 
             background: #050505; border-top: 1px solid #1a1a1a; 
         }
-        footer button { background: #0f0f0f; border: 1px solid #222; color: var(--text); padding: 14px 2px; border-radius: 10px; font-size: 0.6rem; font-weight: bold; }
+        footer button { background: #0f0f0f; border: 1px solid #222; color: var(--text); padding: 12px 2px; border-radius: 8px; font-size: 0.6rem; font-weight: bold; }
         .gold-btn { border-color: var(--gold); color: var(--gold); }
         
+        /* PANELLER */
         .panel { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; display: none; flex-direction: column; padding: 20px; }
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #222; }
-        .close-btn { background: none; border: 1px solid #444; padding: 8px 16px; border-radius: 20px; color: var(--text); }
+        .close-btn { background: none; border: 1px solid #444; padding: 6px 14px; border-radius: 20px; color: var(--text); }
         .list-container { overflow-y: auto; flex: 1; }
-        .list-item { background: #0f0f0f; padding: 15px; margin-bottom: 8px; border-radius: 12px; border-left: 4px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        .list-item b { color: #fff; display: block; }
-        .list-item small { color: var(--gold); font-size: 0.8rem; }
+        .list-item { background: #0f0f0f; padding: 15px; margin-bottom: 8px; border-radius: 10px; border-left: 3px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
         
-        .add-btn { background: var(--gold); color: #000; border: none; padding: 15px; border-radius: 12px; font-size: 0.9rem; font-weight: bold; margin-bottom: 15px; width: 100%; }
-        .add-form { background: #0f0f0f; padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #222; }
-        .add-form input { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 10px; }
         .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: var(--gold); padding: 12px 24px; border-radius: 25px; border: 1px solid var(--gold); opacity: 0; transition: opacity 0.3s; z-index: 3000; pointer-events: none; }
         .toast.show { opacity: 1; }
     </style>
@@ -94,20 +95,21 @@
 <body>
 
     <div class="daily-verse" onclick="openPanel('verse')">
-        <div class="verse-header">
-            <span class="verse-label">📖 Günün Ayeti</span>
-        </div>
-        <div class="verse-text" id="verseText">Yükleniyor...</div>
-        <div class="verse-ref" id="verseRef"></div>
+        <div class="verse-header"><span class="verse-label">📖 Günün Ayeti</span></div>
+        <div class="verse-text" id="verseText">Ayet yükleniyor...</div>
+        <div class="verse-ref" id="verseRef">Lütfen bekleyin</div>
     </div>
 
-    <header><div class="logo">SUAL ŞİFA</div></header>
+    <header>
+        <div class="logo-text">SUAL ŞİFA</div>
+        <img src="logo.png" alt="Logo" class="app-logo" onerror="this.style.display='none'">
+    </header>
     
     <main>
         <div class="tap-area" id="tapArea">
-            <svg><circle class="bg-circle" cx="125" cy="125" r="115"></circle><circle id="progress" class="main-circle" cx="125" cy="125" r="115" stroke-dasharray="722" stroke-dashoffset="722"></circle></svg>
+            <svg><circle class="bg-circle" cx="120" cy="120" r="110"></circle><circle id="progress" class="main-circle" cx="120" cy="120" r="110" stroke-dasharray="691" stroke-dashoffset="691"></circle></svg>
             <div class="counter-wrapper">
-                <div id="label">Allah</div>
+                <div id="label">Yükleniyor...</div>
                 <div id="counter">0</div>
                 <div class="progress-text"><span id="cur">0</span> / <span id="tgt">33</span></div>
             </div>
@@ -134,8 +136,8 @@
     </footer>
 
     <div id="verse-panel" class="panel">
-        <div class="panel-header"><h2>Günün Ayeti</h2><button class="close-btn" onclick="closeP()">✕</button></div>
-        <div id="fullVerseText" style="text-align:center; padding:20px; font-size:1.2rem; color:#fff;"></div>
+        <div class="panel-header"><h2>Ayet Detayı</h2><button class="close-btn" onclick="closeP()">✕</button></div>
+        <div id="fullVerseText" style="text-align:center; padding:20px; font-size:1.1rem; line-height:1.6; color:#fff;"></div>
     </div>
 
     <div id="list-panel" class="panel">
@@ -145,48 +147,52 @@
 
     <div id="myzikir-panel" class="panel">
         <div class="panel-header"><h2>Zikirlerim</h2><button class="close-btn" onclick="closeP()">✕</button></div>
-        <button class="add-btn" onclick="showAddForm()">+ Yeni Zikir Ekle</button>
-        <div class="add-form" id="addForm" style="display:none;">
-            <input type="text" id="zikirName" placeholder="Zikir adı">
-            <input type="number" id="zikirTarget" placeholder="Hedef" value="33">
-            <button class="add-btn" onclick="addZikir()">Kaydet</button>
-        </div>
         <div class="list-container" id="myZikirCont"></div>
     </div>
 
-    <div id="verses-panel" class="panel">
-        <div class="panel-header"><h2>Ayetler</h2><button class="close-btn" onclick="closeP()">✕</button></div>
-        <div class="list-container" id="versesCont"></div>
-    </div>
-
     <div id="history-panel" class="panel">
-        <div class="panel-header"><h2>Defter</h2><button class="close-btn" onclick="closeP()">✕</button></div>
+        <div class="panel-header"><h2>Kayıt Defteri</h2><button class="close-btn" onclick="closeP()">✕</button></div>
         <div class="list-container" id="hCont"></div>
     </div>
 
     <div class="toast" id="toast"></div>
 
 <script>
-    const dailyVerses = [
-        { text: "Şüphesiz zorlukla beraber bir kolaylık vardır.", ref: "İnşirah, 6" },
-        { text: "Allah, sabredenlerle beraberdir.", ref: "Bakara, 153" },
-        { text: "Kalpler ancak Allah'ı zikretmekle huzur bulur.", ref: "Rad, 28" }
-    ];
-
-    const esmalar = [{n:"Allah", m:"Celle Celaluhu"}, {n:"Er-Rahmân", m:"Bağışlayan"}, {n:"Er-Rahîm", m:"Esirgeyen"}]; // Örnek, listeyi uzatabilirsiniz.
-
+    // Başlangıç Ayarları
     let state = { count: 0, target: 33, current: { n: "Allah", m: "" }, history: [], undo: [], customZikirs: [] };
 
+    const esmalar = [
+        {n:"Allah", m:"Celle Celaluhu"}, {n:"Er-Rahmân", m:"Bağışlayan"}, {n:"Er-Rahîm", m:"Esirgeyen"},
+        {n:"El-Melik", m:"Mülkün Sahibi"}, {n:"El-Kuddûs", m:"Eksiksiz"}
+    ]; // Örnek liste
+
+    // 1. DİNAMİK AYET ÇEKME (API)
+    async function fetchAyet() {
+        try {
+            const randomVerse = Math.floor(Math.random() * 6236) + 1;
+            const res = await fetch(`https://api.acikkuran.com/surah/verse/${randomVerse}`);
+            const data = await res.json();
+            if(data.data) {
+                const ayet = data.data.verse;
+                const ref = `${data.data.surah.name}, ${data.data.verseNumber}`;
+                document.getElementById('verseText').innerText = ayet;
+                document.getElementById('verseRef').innerText = ref;
+                document.getElementById('fullVerseText').innerText = ayet + "\n\n(" + ref + ")";
+            }
+        } catch (e) {
+            document.getElementById('verseText').innerText = "Allah sabredenlerle beraberdir.";
+            document.getElementById('verseRef').innerText = "Bakara, 153";
+        }
+    }
+
+    // UYGULAMA BAŞLATMA
     function init() {
-        const saved = JSON.parse(localStorage.getItem('sual_data') || '{}');
+        const saved = JSON.parse(localStorage.getItem('sual_v10') || '{}');
         Object.assign(state, saved);
-        const v = dailyVerses[new Date().getDate() % dailyVerses.length];
-        document.getElementById('verseText').innerText = v.text;
-        document.getElementById('verseRef').innerText = v.ref;
+        fetchAyet();
         update();
         renderEsmalar();
-        renderMyZikirs();
-        renderVerses();
+        document.getElementById('tapArea').onclick = tap;
     }
 
     function update() {
@@ -194,54 +200,42 @@
         document.getElementById('cur').innerText = state.count;
         document.getElementById('tgt').innerText = state.target;
         document.getElementById('label').innerText = state.current.n;
+        
         const circle = document.getElementById('progress');
-        const offset = 722 - (state.count / state.target * 722);
+        const circumference = 2 * Math.PI * 110;
+        const offset = circumference - (state.count / state.target * circumference);
         circle.style.strokeDashoffset = offset;
-        localStorage.setItem('sual_data', JSON.stringify(state));
+        
+        localStorage.setItem('sual_v10', JSON.stringify(state));
     }
 
     function tap() {
         if (state.count < state.target) {
             state.undo.push(state.count);
             state.count++;
-            if(navigator.vibrate) navigator.vibrate(30);
+            if(navigator.vibrate) navigator.vibrate(35);
             update();
             if (state.count == state.target) {
                 state.history.unshift({n: state.current.n, d: new Date().toLocaleDateString()});
-                showToast("Tamamlandı!");
+                showToast("Maaşallah, Tamamlandı!");
             }
         }
     }
 
-    document.getElementById('tapArea').onclick = tap;
-
     function openPanel(id) { document.getElementById(id + '-panel').style.display = 'flex'; if(id=='history') renderHistory(); }
     function closeP() { document.querySelectorAll('.panel').forEach(p => p.style.display = 'none'); }
     function setTarget(t) { state.target = t; state.count = 0; update(); }
-    function reset() { if(confirm('Sıfırlansın mı?')) { state.count = 0; update(); } }
+    function reset() { if(confirm('Sıfırlansın mı?')) { state.count = 0; state.undo = []; update(); } }
     function undo() { if(state.undo.length) { state.count = state.undo.pop(); update(); } }
     
-    function showAddForm() { document.getElementById('addForm').style.display = 'block'; }
-    function addZikir() {
-        const n = document.getElementById('zikirName').value;
-        const t = document.getElementById('zikirTarget').value;
-        if(n) { state.customZikirs.push({n, t}); renderMyZikirs(); document.getElementById('addForm').style.display = 'none'; }
-    }
-
     function renderEsmalar() {
         document.getElementById('lCont').innerHTML = esmalar.map(e => `<div class="list-item" onclick="select('${e.n}')"><b>${e.n}</b><small>${e.m}</small></div>`).join('');
     }
-    function renderMyZikirs() {
-        document.getElementById('myZikirCont').innerHTML = state.customZikirs.map(z => `<div class="list-item" onclick="select('${z.n}', ${z.t})"><b>${z.n}</b><small>Hedef: ${z.t}</small></div>`).join('');
-    }
-    function renderVerses() {
-        document.getElementById('versesCont').innerHTML = dailyVerses.map(v => `<div class="list-item"><b>${v.ref}</b><small>${v.text}</small></div>`).join('');
-    }
     function renderHistory() {
-        document.getElementById('hCont').innerHTML = state.history.map(h => `<div class="list-item"><b>${h.n}</b><small>${h.d}</small></div>`).join('');
+        document.getElementById('hCont').innerHTML = state.history.slice(0,20).map(h => `<div class="list-item"><b>${h.n}</b><small>${h.d}</small></div>`).join('');
     }
 
-    function select(n, t = 33) { state.current.n = n; state.target = t; state.count = 0; update(); closeP(); }
+    function select(n) { state.current.n = n; state.count = 0; update(); closeP(); }
     function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 
     init();
