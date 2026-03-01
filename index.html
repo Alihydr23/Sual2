@@ -20,29 +20,32 @@
             display: flex; flex-direction: column; overflow: hidden; 
         }
         
-        /* AYET BÖLÜMÜ */
+        /* GÜNLÜK AYET BÖLÜMÜ */
         .daily-verse {
             background: linear-gradient(135deg, #1a1200 0%, #0f0a00 100%);
             border-bottom: 1px solid var(--gold);
-            padding: 15px 20px;
+            padding: 12px 20px;
             cursor: pointer;
-            min-height: 80px;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .verse-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .verse-label { font-size: 0.65rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-        .verse-text { font-size: 0.9rem; line-height: 1.4; color: #fff; font-style: italic; text-align: center; }
+        .verse-text { font-size: 0.85rem; line-height: 1.4; color: #fff; font-style: italic; text-align: center; }
         .verse-ref { font-size: 0.7rem; color: var(--gold); text-align: right; margin-top: 3px; }
 
-        /* HEADER & LOGO */
+        /* LOGO VE HEADER */
         header { padding: 10px 0; text-align: center; }
-        .logo-text { color: var(--gold); font-size: 1.6rem; font-weight: bold; letter-spacing: 3px; }
-        .app-logo { width: 50px; margin-top: 5px; filter: drop-shadow(0 0 5px var(--gold)); border-radius: 50%; }
+        .logo-text { color: var(--gold); font-size: 1.5rem; font-weight: bold; letter-spacing: 3px; }
+        .app-logo { display: block; margin: 8px auto; width: 60px; filter: drop-shadow(0 0 5px var(--gold)); border-radius: 50%; }
 
         /* ANA EKRAN */
         main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; }
         
         .tap-area {
-            position: relative; width: 240px; height: 240px;
+            position: relative; width: 230px; height: 230px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             cursor: pointer; border-radius: 50%;
         }
@@ -55,12 +58,12 @@
         
         .counter-wrapper { text-align: center; z-index: 5; pointer-events: none; }
         #counter { font-size: 4rem; color: #fff; font-weight: 200; }
-        #label { font-size: 1.3rem; color: var(--gold); font-weight: 600; }
+        #label { font-size: 1.2rem; color: var(--gold); font-weight: 600; }
         .progress-text { font-size: 0.75rem; opacity: 0.5; margin-top: 5px; }
         
         .quick-targets { display: flex; gap: 8px; margin-top: 15px; }
         .quick-targets button {
-            padding: 8px 16px; border-radius: 20px; font-size: 0.75rem;
+            padding: 8px 16px; border-radius: 20px; font-size: 0.7rem;
             background: #0f0f0f; border: 1px solid #333; color: var(--text);
         }
         .quick-targets button.active { border-color: var(--gold); color: var(--gold); }
@@ -72,7 +75,7 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         
-        /* ALT MENÜ */
+        /* FOOTER */
         footer { 
             padding: 12px 10px calc(12px + env(safe-area-inset-bottom)); 
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; 
@@ -81,14 +84,16 @@
         footer button { background: #0f0f0f; border: 1px solid #222; color: var(--text); padding: 12px 2px; border-radius: 8px; font-size: 0.6rem; font-weight: bold; }
         .gold-btn { border-color: var(--gold); color: var(--gold); }
         
-        /* PANELLER */
+        /* PANELS */
         .panel { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; display: none; flex-direction: column; padding: 20px; }
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #222; }
         .close-btn { background: none; border: 1px solid #444; padding: 6px 14px; border-radius: 20px; color: var(--text); }
         .list-container { overflow-y: auto; flex: 1; }
         .list-item { background: #0f0f0f; padding: 15px; margin-bottom: 8px; border-radius: 10px; border-left: 3px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: var(--gold); padding: 12px 24px; border-radius: 25px; border: 1px solid var(--gold); opacity: 0; transition: opacity 0.3s; z-index: 3000; pointer-events: none; }
+        .list-item b { color: #fff; }
+        .list-item small { color: var(--gold); display: block; font-size: 0.75rem; }
+
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: var(--gold); padding: 10px 20px; border-radius: 20px; border: 1px solid var(--gold); opacity: 0; transition: opacity 0.3s; z-index: 3000; pointer-events: none; font-size: 0.8rem; }
         .toast.show { opacity: 1; }
     </style>
 </head>
@@ -96,20 +101,20 @@
 
     <div class="daily-verse" onclick="openPanel('verse')">
         <div class="verse-header"><span class="verse-label">📖 Günün Ayeti</span></div>
-        <div class="verse-text" id="verseText">Ayet yükleniyor...</div>
-        <div class="verse-ref" id="verseRef">Lütfen bekleyin</div>
+        <div class="verse-text" id="verseText">Ayet seçiliyor...</div>
+        <div class="verse-ref" id="verseRef">...</div>
     </div>
 
     <header>
         <div class="logo-text">SUAL ŞİFA</div>
-        <img src="logo.png" alt="Logo" class="app-logo" onerror="this.style.display='none'">
+        <img src="logo.png" alt="Logo" class="app-logo" onerror="this.style.opacity='0'">
     </header>
     
     <main>
         <div class="tap-area" id="tapArea">
-            <svg><circle class="bg-circle" cx="120" cy="120" r="110"></circle><circle id="progress" class="main-circle" cx="120" cy="120" r="110" stroke-dasharray="691" stroke-dashoffset="691"></circle></svg>
+            <svg><circle class="bg-circle" cx="115" cy="115" r="105"></circle><circle id="progress" class="main-circle" cx="115" cy="115" r="105" stroke-dasharray="660" stroke-dashoffset="660"></circle></svg>
             <div class="counter-wrapper">
-                <div id="label">Yükleniyor...</div>
+                <div id="label">Allah</div>
                 <div id="counter">0</div>
                 <div class="progress-text"><span id="cur">0</span> / <span id="tgt">33</span></div>
             </div>
@@ -147,7 +152,14 @@
 
     <div id="myzikir-panel" class="panel">
         <div class="panel-header"><h2>Zikirlerim</h2><button class="close-btn" onclick="closeP()">✕</button></div>
-        <div class="list-container" id="myZikirCont"></div>
+        <div class="list-container" id="myZikirCont">
+            <div style="padding:20px; opacity:0.5; text-align:center;">Henüz özel zikir eklenmedi.</div>
+        </div>
+    </div>
+
+    <div id="verses-panel" class="panel">
+        <div class="panel-header"><h2>Tüm Ayetler</h2><button class="close-btn" onclick="closeP()">✕</button></div>
+        <div class="list-container" id="versesCont"></div>
     </div>
 
     <div id="history-panel" class="panel">
@@ -158,40 +170,43 @@
     <div class="toast" id="toast"></div>
 
 <script>
-    // Başlangıç Ayarları
-    let state = { count: 0, target: 33, current: { n: "Allah", m: "" }, history: [], undo: [], customZikirs: [] };
+    // VERİLER
+    const localVerses = [
+        { t: "Şüphesiz zorlukla beraber bir kolaylık vardır.", r: "İnşirah, 6" },
+        { t: "Allah, sabredenlerle beraberdir.", r: "Bakara, 153" },
+        { t: "Kalpler ancak Allah'ı zikretmekle huzur bulur.", r: "Rad, 28" },
+        { t: "Allah bize yeter, O ne güzel vekildir.", r: "Al-i İmran, 173" },
+        { t: "Ben size çok yakınım. Dua edenin duasına icabet ederim.", r: "Bakara, 186" },
+        { t: "O, size şah damarınızdan daha yakındır.", r: "Kaf, 16" },
+        { t: "Allah, iman edenlerin dostudur.", r: "Bakara, 257" },
+        { t: "Sabret! Senin sabrın ancak Allah'ın yardımıyladır.", r: "Nahl, 127" },
+        { t: "Rabbin seni terk etmedi ve sana darılmadı.", r: "Duha, 3" },
+        { t: "İyiliğin karşılığı, yalnız iyiliktir.", r: "Rahman, 60" }
+    ];
 
     const esmalar = [
         {n:"Allah", m:"Celle Celaluhu"}, {n:"Er-Rahmân", m:"Bağışlayan"}, {n:"Er-Rahîm", m:"Esirgeyen"},
-        {n:"El-Melik", m:"Mülkün Sahibi"}, {n:"El-Kuddûs", m:"Eksiksiz"}
-    ]; // Örnek liste
+        {n:"El-Melik", m:"Mülkün Sahibi"}, {n:"El-Kuddûs", m:"Eksiksiz"}, {n:"Es-Selâm", m:"Selamet Veren"},
+        {n:"El-Mü'min", m:"Güven Veren"}, {n:"El-Azîz", m:"Yüce"}, {n:"El-Cebbâr", m:"Kudretli"}
+    ];
 
-    // 1. DİNAMİK AYET ÇEKME (API)
-    async function fetchAyet() {
-        try {
-            const randomVerse = Math.floor(Math.random() * 6236) + 1;
-            const res = await fetch(`https://api.acikkuran.com/surah/verse/${randomVerse}`);
-            const data = await res.json();
-            if(data.data) {
-                const ayet = data.data.verse;
-                const ref = `${data.data.surah.name}, ${data.data.verseNumber}`;
-                document.getElementById('verseText').innerText = ayet;
-                document.getElementById('verseRef').innerText = ref;
-                document.getElementById('fullVerseText').innerText = ayet + "\n\n(" + ref + ")";
-            }
-        } catch (e) {
-            document.getElementById('verseText').innerText = "Allah sabredenlerle beraberdir.";
-            document.getElementById('verseRef').innerText = "Bakara, 153";
-        }
+    let state = { count: 0, target: 33, current: { n: "Allah", m: "" }, history: [], undo: [], customZikirs: [] };
+
+    // AYET SEÇME
+    function selectRandomVerse() {
+        const selected = localVerses[Math.floor(Math.random() * localVerses.length)];
+        document.getElementById('verseText').innerText = selected.t;
+        document.getElementById('verseRef').innerText = selected.r;
+        document.getElementById('fullVerseText').innerText = selected.t + "\n\n(" + selected.r + ")";
     }
 
-    // UYGULAMA BAŞLATMA
+    // BAŞLATMA
     function init() {
-        const saved = JSON.parse(localStorage.getItem('sual_v10') || '{}');
+        const saved = JSON.parse(localStorage.getItem('sual_pro_v1') || '{}');
         Object.assign(state, saved);
-        fetchAyet();
+        selectRandomVerse();
         update();
-        renderEsmalar();
+        renderLists();
         document.getElementById('tapArea').onclick = tap;
     }
 
@@ -202,11 +217,11 @@
         document.getElementById('label').innerText = state.current.n;
         
         const circle = document.getElementById('progress');
-        const circumference = 2 * Math.PI * 110;
+        const circumference = 2 * Math.PI * 105;
         const offset = circumference - (state.count / state.target * circumference);
         circle.style.strokeDashoffset = offset;
         
-        localStorage.setItem('sual_v10', JSON.stringify(state));
+        localStorage.setItem('sual_pro_v1', JSON.stringify(state));
     }
 
     function tap() {
@@ -217,25 +232,26 @@
             update();
             if (state.count == state.target) {
                 state.history.unshift({n: state.current.n, d: new Date().toLocaleDateString()});
-                showToast("Maaşallah, Tamamlandı!");
+                showToast("Maaşallah, Hedefe Ulaşıldı!");
             }
         }
     }
 
-    function openPanel(id) { document.getElementById(id + '-panel').style.display = 'flex'; if(id=='history') renderHistory(); }
-    function closeP() { document.querySelectorAll('.panel').forEach(p => p.style.display = 'none'); }
-    function setTarget(t) { state.target = t; state.count = 0; update(); }
-    function reset() { if(confirm('Sıfırlansın mı?')) { state.count = 0; state.undo = []; update(); } }
-    function undo() { if(state.undo.length) { state.count = state.undo.pop(); update(); } }
-    
-    function renderEsmalar() {
-        document.getElementById('lCont').innerHTML = esmalar.map(e => `<div class="list-item" onclick="select('${e.n}')"><b>${e.n}</b><small>${e.m}</small></div>`).join('');
-    }
-    function renderHistory() {
-        document.getElementById('hCont').innerHTML = state.history.slice(0,20).map(h => `<div class="list-item"><b>${h.n}</b><small>${h.d}</small></div>`).join('');
+    function renderLists() {
+        document.getElementById('lCont').innerHTML = esmalar.map(e => `<div class="list-item" onclick="selectZikir('${e.n}')"><div><b>${e.n}</b><small>${e.m}</small></div></div>`).join('');
+        document.getElementById('versesCont').innerHTML = localVerses.map(v => `<div class="list-item"><div><b>${v.r}</b><small>${v.t}</small></div></div>`).join('');
     }
 
-    function select(n) { state.current.n = n; state.count = 0; update(); closeP(); }
+    function renderHistory() {
+        document.getElementById('hCont').innerHTML = state.history.slice(0,25).map(h => `<div class="list-item"><b>${h.n}</b><small>${h.d}</small></div>`).join('');
+    }
+
+    function selectZikir(n) { state.current.n = n; state.count = 0; state.undo = []; update(); closeP(); showToast(n + " seçildi."); }
+    function setTarget(t) { state.target = t; state.count = 0; update(); document.querySelectorAll('.quick-targets button').forEach(b => b.classList.toggle('active', b.innerText == t)); }
+    function reset() { if(confirm('Sıfırlansın mı?')) { state.count = 0; state.undo = []; update(); } }
+    function undo() { if(state.undo.length) { state.count = state.undo.pop(); update(); } }
+    function openPanel(id) { document.getElementById(id + '-panel').style.display = 'flex'; if(id=='history') renderHistory(); }
+    function closeP() { document.querySelectorAll('.panel').forEach(p => p.style.display = 'none'); }
     function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 
     init();
